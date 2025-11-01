@@ -41,6 +41,7 @@ export default function Footer() {
         </div>
       </div>
 
+   <div>
       {/* Bottom Links */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-b border-gray-700 pb-12 mb-8">
         
@@ -70,7 +71,7 @@ export default function Footer() {
             <li><a href="#" className="hover:text-white transition">Terms & Conditions</a></li>
           </ul>
         </div>
-
+</div>
   <div className="flex flex-col gap-2">
         {/* Column 3 */}
         <div>
