@@ -71,6 +71,7 @@ export default function Footer() {
           </ul>
         </div>
 
+  <div className="flex flex-col gap-2">
         {/* Column 3 */}
         <div>
           <h4 className="font-semibold text-sm mb-4">FOLLOW US</h4>
@@ -97,7 +98,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-
+  </div>
       {/* Copyright */}
       <div className="text-center text-xs text-gray-500">
         Copyright © 2023 mettamuse. All rights reserved.

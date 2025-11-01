@@ -5,6 +5,10 @@ export default function Filters({
   products = [],
   selectedFilters = {},
   setSelectedFilters = () => {},
+  selectedCategories = new Set(),
+  toggleCategory = () => {},
+  sort = '',
+  setSort = () => {},
 }) {
   const [expandedSections, setExpandedSections] = useState({
     idealFor: true,
@@ -16,6 +20,9 @@ export default function Filters({
     rawMaterials: false,
   });
 
+  const [sortOpen, setSortOpen] = useState(false);
+  const [selectedSort, setSelectedSort] = useState('RECOMMENDED');
+
   const toggleSection = (section) => {
     setExpandedSections((prev) => ({
       ...prev,
@@ -23,39 +30,53 @@ export default function Filters({
     }));
   };
 
-  const handleFilterChange = (filterType, value) => {
-    setSelectedFilters((prev) => ({
-      ...prev,
-      [filterType]: prev[filterType]?.includes(value)
-        ? prev[filterType].filter((item) => item !== value)
-        : [...(prev[filterType] || []), value],
-    }));
-  };
+  const sortOptions = [
+    { label: 'RECOMMENDED', value: '' },
+    { label: 'NEWEST FIRST', value: 'newest' },
+    { label: 'POPULAR', value: 'popular' },
+    { label: 'PRICE : HIGH TO LOW', value: 'price-desc' },
+    { label: 'PRICE : LOW TO HIGH', value: 'price-asc' },
+  ];
 
-  const handleUnselectAll = (filterType) => {
-    setSelectedFilters((prev) => ({
-      ...prev,
-      [filterType]: [],
-    }));
+  const handleSortChange = (label, value) => {
+    setSelectedSort(label);
+    setSort(value);
+    setSortOpen(false);
   };
 
   const itemCount = products.length;
+
+  // Extract unique categories from products
+  const categories = useMemo(
+    () => [...new Set(products.map((p) => p.category))],
+    [products]
+  );
 
   return (
     <div className="w-full bg-white">
       {/* Header */}
       <div className="flex items-center justify-between py-4 px-4 border-b border-gray-200">
         <h2 className="text-sm font-bold text-gray-900">{itemCount.toLocaleString()} ITEMS</h2>
-        <button className="text-sm text-gray-500 hover:text-gray-700 transition flex items-center gap-1">
-          <ChevronUp size={16} />
-          HIDE FILTER
-        </button>
+        <div className="flex items-center gap-4">
+          <button className="text-sm text-gray-500 hover:text-gray-700 transition flex items-center gap-1">
+            <ChevronUp size={16} />
+            HIDE FILTER
+          </button>
+          
+        </div>
       </div>
+
+   
 
       {/* Filters */}
       <div className="space-y-0">
         {/* Customizable */}
-        
+        <div className="border-b border-gray-200 py-4 px-4">
+          <label className="flex items-center space-x-2 cursor-pointer">
+            <input type="checkbox" className="w-4 h-4 border border-gray-300" />
+            <span className="text-sm font-semibold text-gray-900">CUSTOMIZABLE</span>
+          </label>
+        </div>
 
         {/* Ideal For */}
         <div className="border-b border-gray-200">
@@ -70,20 +91,24 @@ export default function Filters({
             <div className="px-4 pb-4 space-y-3 bg-gray-50">
               <div>
                 <span className="text-xs font-medium text-gray-500">All</span>
-                <button className="text-xs text-gray-400 hover:text-gray-600 ml-4">Unselect all</button>
+                <button 
+                  onClick={() => toggleCategory('')}
+                  className="text-xs text-gray-400 hover:text-gray-600 ml-4"
+                >
+                  Unselect all
+                </button>
               </div>
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 border border-gray-300" />
-                <span className="text-sm text-gray-700">Men</span>
-              </label>
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 border border-gray-300" />
-                <span className="text-sm text-gray-700">Women</span>
-              </label>
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 border border-gray-300" />
-                <span className="text-sm text-gray-700">Baby & Kids</span>
-              </label>
+              {categories.map((cat) => (
+                <label key={cat} className="flex items-center space-x-2 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    checked={selectedCategories.has(cat)}
+                    onChange={() => toggleCategory(cat)}
+                    className="w-4 h-4 border border-gray-300" 
+                  />
+                  <span className="text-sm text-gray-700 capitalize">{cat}</span>
+                </label>
+              ))}
             </div>
           )}
         </div>

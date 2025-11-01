@@ -12,7 +12,7 @@ export default function ProductCard({ product }) {
       </div>
 
       <div className="mt-4 flex items-center justify-between">
-        <span className="text-lg font-semibold ">Sign in or Create an account to see pricing </span>
+        <span className="text-xs text-gray-500 mt-1 capitalize ">Sign in or Create an account to see pricing </span>
       </div>
     </div>
   );
